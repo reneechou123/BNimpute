@@ -1,0 +1,4 @@
+# Python libraries
+python >=3.6
+pandas
+numpy
