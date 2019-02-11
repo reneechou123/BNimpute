@@ -5,7 +5,7 @@ import os
 import numpy as np
 
 metadata = pd.read_csv('rnaseq_metadata_copy.tsv', sep='\t', header=0)
-data = pd.read_csv('rnaseq_data_tpm_from_metadata.tsv', sep='\t', header=0, index_col=0)
+exp = pd.read_csv('rnaseq_data_tpm_from_metadata.tsv', sep='\t', header=0, index_col=0)
 
 '''
 split metadata based on tissue and cell lines
@@ -56,8 +56,8 @@ with open('rnaseq_sample_stat.txt', 'w') as f:
 '''
 split expression data into different tissue types
 '''
-# function for generating expression datasets for GENIE3
-def generate_files_for_GENIE3(metadata, key, ind, dir_name, exp, prior):
+# function for generating expression datasets
+def generate_expression_files(metadata, key, ind, dir_name, exp):
     os.system('mkdir -p ' + dir_name)
     if ind == 0:
         keys = key.split('/')
@@ -68,34 +68,12 @@ def generate_files_for_GENIE3(metadata, key, ind, dir_name, exp, prior):
     else:
         temp_list = metadata.loc[metadata['cell type'] == key, 'sample_name'].tolist()    
     sub_exp = exp[temp_list]
-    pri = prior
-    # intersect for expression data and remove all zero counts
-    index = list(pri.index)
-    sub_exp = sub_exp.loc[sub_exp.index.isin(index), :]
-    sub_exp = sub_exp[(sub_exp.T != 0).any()]
-    # get final intersected genes for prior
-    index2 = list(sub_exp.index)
-    pri = pri.loc[index2, pri.columns.isin(index2)]
-    # remove TFs having no targets
-    pri = pri.loc[:, (pri != 0).any()]
     # write output
     sub_exp.to_csv(dir_name + '/' + key.replace('/', '.') + '_exp.tsv', header=False, index=True, sep='\t')
-    pri.to_csv(dir_name + '/' + key.replace('/', '.') + '_prior.tsv', header=True, index=True, sep='\t')
     # return log
     return key.replace('/', '.') + ', ' + str(sub_exp.shape[1])
 
-# select groups of samples
-np.random.seed(123)
-groups = [sample_list[i] for i in np.sort(np.random.randint(0, len(sample_list) - 1, 10))]
-# import expression and prior
-exp = pd.read_csv('rnaseq_data_tpm_from_metadata.tsv', sep='\t', header=0, index_col=0)
-prior = pd.read_csv('flynet_supervised_0.6.txt', sep='\t', header=None)
-# making prior file
-prior = prior.pivot(columns=0, index=1, values=2).rename_axis(None).fillna(0)
 
-with open('input_for_NetREX_log.txt', 'w') as f:
-    for i in range(0, len(groups)):
-        log = generate_files_for_NetREX(metadata, groups[i][0], groups[i][1][1], str(i + 1), exp, prior)
-        _ = f.write(log + '\n')
-    f.close
+for i in range(0, len(sample_list)):
+    log = generate_expression_files(metadata, sample_list[i][0], sample_list[i][1][1], 'exp', exp)
 

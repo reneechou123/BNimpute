@@ -7,4 +7,7 @@ Workflow:
    Output: tissue-specific epxression datasets
 
 2. For each tissue-specific expression dataset, detect outliers using WGCNA,
-   drop out singleton samples () 
+   drop out singleton samples for batch effect removal, remove batch effect,
+   and then correct for PCA variances.  
+   Input:
+   Output: 
