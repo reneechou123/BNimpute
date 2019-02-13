@@ -1,3 +1,13 @@
+# R packages
+r=3.4.1
+r-bnlearn
+r-feather
+bioconductor-rgraphviz
+r-wgcna
+r-dplyr
+r-rlist
+caret
+
 # Python libraries
 python >=3.6
 pandas
