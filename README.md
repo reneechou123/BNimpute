@@ -1,5 +1,6 @@
-# BNimpute
-
+BNimpute
+<img src="../assets/logo_2.png" height="180" align="right" />
+=============
 Workflow:
 
 1. Split the expression datasets into different tissue types <br>
