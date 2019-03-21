@@ -13,15 +13,17 @@ Workflow:
    <b>Input:</b> <br>
    <b>Output:</b> <br>
    
-=========================================
+=========================================<br>
 ovary note:
 #### # samples: 450
 #### # genes: 17471
 #### # studies: 68
-data <- read.table('ovary_exp.tsv', row.names=1) <br>
-datExpr0 <- as.data.frame(t(data)) <br>
-names(datExpr0) <- rownames(data) <br>
-rownames(datExpr0) <- names(data) <br>
+``` r
+data <- read.table('ovary_exp.tsv', row.names=1) 
+datExpr0 <- as.data.frame(t(data)) 
+names(datExpr0) <- rownames(data) 
+rownames(datExpr0) <- names(data) 
+```
 #### # data cleaning
 #### # removing genes not expressed in the tissue (minFraction = 0.5)
 #### # excluding 715 genes due to too many missing samples or zero variance
