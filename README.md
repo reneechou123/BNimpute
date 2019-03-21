@@ -65,7 +65,7 @@ combat.data <- ComBat(dat=mod.data, batch=batch, mod=modcombat, par.prior=TRUE, 
 combat.data.pca <- parallelPCA(combat.data, value='pca', BPPARAM=SerialParam())
 var1 <- round(attr(combat.data.pca,"percentVar")[1],2)*100
 var2 <- round(attr(combat.data.pca,"percentVar")[2],2)*100
-combat.data.pca <- parallelPCA(combat.data, value='pca')
+combat.data.pca <- as.data.frame(combat.data.pca)
 g2 <- ggplot(combat.data.pca, aes(x=PC1, y=PC2, color=studies)) +
        geom_point() +
        scale_color_discrete(name='') +
