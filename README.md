@@ -58,7 +58,24 @@ g
 ```
 #### # remove batch effect and plot PCA again
 ```r
-
+batch <- studies
+mod.data <- data
+modcombat <- model.matrix(~1, data=batch)
+combat.data <- ComBat(dat=mod.data, batch=batch, mod=modcombat, par.prior=TRUE, BPPARAM=SerialParam())
+combat.data.pca <- parallelPCA(combat.data, value='pca', BPPARAM=SerialParam())
+var1 <- round(attr(combat.data.pca,"percentVar")[1],2)*100
+var2 <- round(attr(combat.data.pca,"percentVar")[2],2)*100
+combat.data.pca <- parallelPCA(combat.data, value='pca')
+g2 <- ggplot(combat.data.pca, aes(x=PC1, y=PC2, color=studies)) +
+       geom_point() +
+       scale_color_discrete(name='') +
+       theme_bw() +
+       theme(legend.position='bottom', legend.direction='horizontal') +
+       xlab(paste0('PC1 (', var1, '%)')) +
+       ylab(paste0('PC2 (', var2, '%)')) +
+       xlim(-160,400) +
+       ylim(-160,400)
+g2
 ```
 #### # correct for PCA variances
 
