@@ -34,8 +34,39 @@ rownames(datExpr0) <- names(data)
 #### # removing genes not expressed in the tissue (minFraction = 0.5)
 #### # excluding 715 genes due to too many missing samples or zero variance
 #### # genes: 16756
-#### # plot PCA
 #### # cluster samples and remove outliers (at height 6e+05)
+#### # samples: 437
+#### # plot pca before batch effect removal
+``` r
+data = read.table('exp/ovary_cleaned.tsv', header=TRUE, row.names=1)
+studies <- as.factor(metadata[metadata[['sample_name']] %in% rownames(data), 'study'])
+data <- log2(data + 1)
+data <- t(data)
+data.pca <- parallelPCA(data, value='pca', BPPARAM=SerialParam())
+var1 <- round(attr(data.pca,"percentVar")[1],2)*100
+var2 <- round(attr(data.pca,"percentVar")[2],2)*100
+data.pca <- as.data.frame(data.pca)
+g <- ggplot(data.pca, aes(x=PC1, y=PC2, color=studies)) +
+       geom_point() +
+       scale_color_discrete(name='') +
+       theme_bw() +
+       theme(legend.position='bottom', legend.direction='horizontal') +
+       xlab(paste0('PC1 (', var1, '%)')) +
+       ylab(paste0('PC2 (', var2, '%)')) +
+       xlim(-160,400) +
+       ylim(-160,400)
+g
+```
+#### # remove batch effect and plot PCA again
 
+#### # correct for PCA variances
 
 Cross Validation
+
+
+
+
+
+
+
+
