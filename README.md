@@ -8,7 +8,7 @@ Workflow:
    <b>Output:</b> tissue-specific epxression datasets <br>
 
 2. For each tissue-specific expression dataset, detect outliers using WGCNA,
-   remove batch effect, and then correct for PCA variances. <br> 
+   remove batch effect, and then correct for PC variances. <br> 
    <b>Input:</b> <br>
    <b>Output:</b> <br>
 #
@@ -57,7 +57,7 @@ g <- ggplot(data.pca, aes(x=PC1, y=PC2, color=studies)) +
 g
 ```
 #### # remove batch effect and plot PCA again
-```r
+``` r
 batch <- studies
 mod.data <- data
 modcombat <- model.matrix(~1, data=batch)
@@ -66,7 +66,26 @@ combat.data.pca <- parallelPCA(combat.data, value='pca', BPPARAM=SerialParam())
 var1 <- round(attr(combat.data.pca,"percentVar")[1],2)*100
 var2 <- round(attr(combat.data.pca,"percentVar")[2],2)*100
 combat.data.pca <- as.data.frame(combat.data.pca)
-g2 <- ggplot(combat.data.pca, aes(x=PC1, y=PC2, color=studies)) +
+g2 <- ggplot(combat.data.pca, aes(x=-PC1, y=PC2, color=studies)) +
+       geom_point() +
+       scale_color_discrete(name='') +
+       theme_bw() +
+       theme(legend.position='bottom', legend.direction='horizontal') +
+       xlab(paste0('PC1 (', var1, '%)')) +
+       ylab(paste0('PC2 (', var2, '%)')) +
+       xlim(-160,410) +
+       ylim(-160,410)
+g2
+```
+#### # correct for PC variances
+``` r
+n.pc <- num.sv(combat.data, mod=modcombat, method='be', seed=123)
+res <- sva_network(combat.data, n.pc)
+res.pca <- parallelPCA(res, value='pca', BPPARAM=SerialParam())
+var1 <- round(attr(res.pca,"percentVar")[1],2)*100
+var2 <- round(attr(res.pca,"percentVar")[2],2)*100
+res.pca <- as.data.frame(res.pca)
+g3 <- ggplot(res.pca, aes(x=-PC1, y=PC2, color=studies)) +
        geom_point() +
        scale_color_discrete(name='') +
        theme_bw() +
@@ -75,9 +94,17 @@ g2 <- ggplot(combat.data.pca, aes(x=PC1, y=PC2, color=studies)) +
        ylab(paste0('PC2 (', var2, '%)')) +
        xlim(-160,400) +
        ylim(-160,400)
-g2
+g3
+
+data = read.table('exp/ovary_cleaned.tsv', header=TRUE, row.names=1)
+res <- as.data.frame(t(res))
+colnames(res) <- colnames(data)
+rownames(res) <- rownames(data)
+datExpr <- res
+write.table(datExpr, 'exp/ovary_cleaned_2.tsv', col.names=T, row.names=T)
 ```
-#### # correct for PCA variances
+#### # WGCNA analysis
+
 
 Cross Validation
 
