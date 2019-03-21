@@ -12,7 +12,13 @@ Workflow:
    and then correct for PCA variances. <br> datExpr0 = as.data.frame(t(data))
    <b>Input:</b> <br>
    <b>Output:</b> <br>
-   
+#
+#
+#
+#
+#
+#
+#
 =========================================<br>
 ovary note:
 #### # samples: 450
