@@ -69,7 +69,7 @@ def generate_expression_files(metadata, key, ind, dir_name, exp):
         temp_list = metadata.loc[metadata['cell type'] == key, 'sample_name'].tolist()    
     sub_exp = exp[temp_list]
     # write output
-    sub_exp.to_csv(dir_name + '/' + key.replace('/', '.') + '_exp.tsv', header=False, index=True, sep='\t')
+    sub_exp.to_csv(dir_name + '/' + key.replace('/', '.') + '_exp.tsv', header=True, index=True, sep='\t')
     # return log
     return key.replace('/', '.') + ', ' + str(sub_exp.shape[1])
 
