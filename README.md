@@ -34,6 +34,8 @@ rownames(datExpr0) <- names(data)
 #### # removing genes not expressed in the tissue (minFraction = 0.5)
 #### # excluding 715 genes due to too many missing samples or zero variance
 #### # genes: 16756
+#### # plot PCA
+#### # cluster samples and remove outliers (at height 6e+05)
 
 
 Cross Validation
