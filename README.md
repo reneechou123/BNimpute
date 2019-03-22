@@ -19,25 +19,25 @@ Workflow:
 #
 #
 =========================================<br>
-ovary note:
-#### # samples: 450
+neuroblast note:
+#### # samples: 34
 #### # genes: 17471
-#### # studies: 68
+#### # studies: 4
 ``` r
-data <- read.table('ovary_exp.tsv', row.names=1) 
+data <- read.table('mushroom body_exp.tsv', header=T, row.names=1) 
 datExpr0 <- as.data.frame(t(data)) 
 names(datExpr0) <- rownames(data) 
 rownames(datExpr0) <- names(data) 
 ```
 #### # data cleaning
 #### # removing genes not expressed in the tissue (minFraction = 0.5)
-#### # excluding 715 genes due to too many missing samples or zero variance
-#### # genes: 16756
-#### # cluster samples and remove outliers (at height 6e+05)
-#### # samples: 437
+#### # excluding 1213 genes due to too many missing samples or zero variance
+#### # genes: 16258
+#### # cluster samples and remove outliers
+#### # samples: 31
 #### # plot pca before batch effect removal
 ``` r
-data = read.table('exp/ovary_cleaned.tsv', header=TRUE, row.names=1)
+data = read.table('mushroom body_cleaned.tsv', header=TRUE, row.names=1)
 studies <- as.factor(metadata[metadata[['sample_name']] %in% rownames(data), 'study'])
 data <- log2(data + 1)
 data <- t(data)
@@ -52,8 +52,8 @@ g <- ggplot(data.pca, aes(x=PC1, y=PC2, color=studies)) +
        theme(legend.position='bottom', legend.direction='horizontal') +
        xlab(paste0('PC1 (', var1, '%)')) +
        ylab(paste0('PC2 (', var2, '%)')) +
-       xlim(-160,400) +
-       ylim(-160,400)
+       xlim(-190, 180) +
+       ylim(-190, 180)
 g
 ```
 #### # remove batch effect and plot PCA again
@@ -73,13 +73,13 @@ g2 <- ggplot(combat.data.pca, aes(x=-PC1, y=PC2, color=studies)) +
        theme(legend.position='bottom', legend.direction='horizontal') +
        xlab(paste0('PC1 (', var1, '%)')) +
        ylab(paste0('PC2 (', var2, '%)')) +
-       xlim(-160,410) +
-       ylim(-160,410)
+       xlim(-190, 180) +
+       ylim(-190, 180)
 g2
 ```
 #### # correct for PC variances
 ``` r
-n.pc <- num.sv(combat.data, mod=modcombat, method='be', seed=123)
+n.pc <- num.sv(data, mod=modcombat, method='be', seed=123)
 res <- sva_network(combat.data, n.pc)
 res.pca <- parallelPCA(res, value='pca', BPPARAM=SerialParam())
 var1 <- round(attr(res.pca,"percentVar")[1],2)*100
@@ -92,21 +92,31 @@ g3 <- ggplot(res.pca, aes(x=-PC1, y=PC2, color=studies)) +
        theme(legend.position='bottom', legend.direction='horizontal') +
        xlab(paste0('PC1 (', var1, '%)')) +
        ylab(paste0('PC2 (', var2, '%)')) +
-       xlim(-160,400) +
-       ylim(-160,400)
+       xlim(-150, 100) +
+       ylim(-150, 100)
 g3
 
-data = read.table('exp/ovary_cleaned.tsv', header=TRUE, row.names=1)
-res <- as.data.frame(t(res))
-colnames(res) <- colnames(data)
-rownames(res) <- rownames(data)
-datExpr <- res
-write.table(datExpr, 'exp/ovary_cleaned_2.tsv', col.names=T, row.names=T)
+data = read.table('mushroom body_cleaned.tsv', header=TRUE, row.names=1)
+datExpr <- combat.data
+datExpr <- as.data.frame(t(datExpr))
+colnames(datExpr) <- colnames(data)
+rownames(datExpr) <- rownames(data)
+write.table(datExpr, 'mushroom body_cleaned_2.tsv', col.names=T, row.names=T)
+
+res.normalized <- normalize.quantiles(res)
+data = read.table('eye-antennal disc_cleaned.tsv', header=TRUE, row.names=1)
+datExpr <- res.normalized
+datExpr <- as.data.frame(t(datExpr))
+colnames(datExpr) <- colnames(data)
+rownames(datExpr) <- rownames(data)
+write.table(datExpr, 'eye-antennal disc_cleaned_2_2.tsv', col.names=T, row.names=T)
 ```
 #### # WGCNA analysis
+#### # select power: 5
 
+#### # GENIE3 analysis
 
-Cross Validation
+#### # Cross Validation
 
 
 
