@@ -19,6 +19,13 @@ Workflow:
 #
 #
 =========================================<br>
+ovariole note:
+#### # samples: 12
+#### # genes: 17471
+#### # studies: 1
+#### # excluding 3711 genes due to too many missing samples or zero variance
+#### # genes: 13760
+
 mushroom body note:
 #### # samples: 34
 #### # genes: 17471
@@ -130,7 +137,7 @@ text(sft$fitIndices[,1], sft$fitIndices[,5], labels=powers, cex=cex1,col="red")
 ```
 #### # select power: 6
 ``` r
-net = blockwiseModules(datExpr, power = 9, TOMType = "signed", minModuleSize = 30, reassignThreshold = 0, mergeCutHeight = 0.25, numericLabels = TRUE, pamRespectsDendro = FALSE, saveTOMs = TRUE, saveTOMFileBase = "ovaryTOM", networkType = 'signed hybrid', verbose = 3)
+net = blockwiseModules(datExpr, power = 7, TOMType = "signed", minModuleSize = 30, reassignThreshold = 0, mergeCutHeight = 0.25, numericLabels = TRUE, pamRespectsDendro = FALSE, saveTOMs = TRUE, saveTOMFileBase = "mushboombodyTOM", networkType = 'signed hybrid', verbose = 3)
 ```
 ``` r
 sizeGrWindow(12, 9)
