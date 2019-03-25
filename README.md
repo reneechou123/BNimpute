@@ -26,6 +26,13 @@ ovariole note:
 #### # excluding 3711 genes due to too many missing samples or zero variance
 #### # genes: 13760
 
+salivary gland note:
+#### # samples: 19
+#### # genes: 17471
+#### # studies: 5
+#### # excluding 3171 genes due to too many missing samples or zero variance
+#### # genes: 14300
+
 mushroom body note:
 #### # samples: 34
 #### # genes: 17471
@@ -40,8 +47,6 @@ rownames(datExpr0) <- names(data)
 #### # removing genes not expressed in the tissue (minFraction = 0.5)
 #### # excluding 1213 genes due to too many missing samples or zero variance
 #### # genes: 16258
-#### # cluster samples and remove outliers
-#### # samples: 31
 #### # plot pca before batch effect removal
 ``` r
 data = read.table('mushroom body_cleaned.tsv', header=TRUE, row.names=1)
@@ -59,8 +64,8 @@ g <- ggplot(data.pca, aes(x=PC1, y=PC2, color=studies)) +
        theme(legend.position='bottom', legend.direction='horizontal') +
        xlab(paste0('PC1 (', var1, '%)')) +
        ylab(paste0('PC2 (', var2, '%)')) +
-       xlim(-190, 180) +
-       ylim(-190, 180)
+       xlim(-190, 280) +
+       ylim(-190, 280)
 g
 ```
 #### # remove batch effect and plot PCA again
@@ -83,25 +88,6 @@ g2 <- ggplot(combat.data.pca, aes(x=-PC1, y=PC2, color=studies)) +
        xlim(-190, 180) +
        ylim(-190, 180)
 g2
-```
-#### # correct for PC variances
-``` r
-n.pc <- num.sv(data, mod=modcombat, method='be', seed=123)
-res <- sva_network(combat.data, n.pc)
-res.pca <- parallelPCA(res, value='pca', BPPARAM=SerialParam())
-var1 <- round(attr(res.pca,"percentVar")[1],2)*100
-var2 <- round(attr(res.pca,"percentVar")[2],2)*100
-res.pca <- as.data.frame(res.pca)
-g3 <- ggplot(res.pca, aes(x=-PC1, y=PC2, color=studies)) +
-       geom_point() +
-       scale_color_discrete(name='') +
-       theme_bw() +
-       theme(legend.position='bottom', legend.direction='horizontal') +
-       xlab(paste0('PC1 (', var1, '%)')) +
-       ylab(paste0('PC2 (', var2, '%)')) +
-       xlim(-150, 100) +
-       ylim(-150, 100)
-g3
 
 data = read.table('mushroom body_cleaned.tsv', header=TRUE, row.names=1)
 datExpr <- combat.data
@@ -109,15 +95,9 @@ datExpr <- as.data.frame(t(datExpr))
 colnames(datExpr) <- colnames(data)
 rownames(datExpr) <- rownames(data)
 write.table(datExpr, 'mushroom body_cleaned_2.tsv', col.names=T, row.names=T)
-
-res.normalized <- normalize.quantiles(res)
-data = read.table('eye-antennal disc_cleaned.tsv', header=TRUE, row.names=1)
-datExpr <- res.normalized
-datExpr <- as.data.frame(t(datExpr))
-colnames(datExpr) <- colnames(data)
-rownames(datExpr) <- rownames(data)
-write.table(datExpr, 'eye-antennal disc_cleaned_2_2.tsv', col.names=T, row.names=T)
 ```
+#### # cluster samples and remove outliers
+#### # samples: 34
 #### # WGCNA analysis
 ``` r
 sft = pickSoftThreshold(datExpr, powerVector = powers, networkType = 'signed hybrid', verbose = 5)
