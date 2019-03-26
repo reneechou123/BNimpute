@@ -22,14 +22,17 @@ ovariole note:
 #### # samples: 12
 #### # genes: 17471
 #### # studies: 1
-#### # excluding 3711 genes due to too many missing samples or zero variance
+#### # excluding 3711 genes due to zero variance
 #### # genes: 13760
+```r
+adjacencyA1 = adjacency(data,power=7,type="signed hybrid")
+```
 
 salivary gland note:
 #### # samples: 19
 #### # genes: 17471
 #### # studies: 5
-#### # excluding 3171 genes due to too many missing samples or zero variance
+#### # excluding 3171 genes due to zero variance
 #### # genes: 14300
 
 mushroom body note:
