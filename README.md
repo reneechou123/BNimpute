@@ -7,8 +7,7 @@ Workflow:
    <b>Input:</b> 1. metadata 2. expression data <br>
    <b>Output:</b> tissue-specific epxression datasets <br>
 
-2. For each tissue-specific expression dataset, detect outliers using WGCNA,
-   remove batch effect, and then correct for PC variances. <br> 
+2. For each tissue-specific expression dataset, clean the data (remove genes with missing value or zero variance, remove sample outliers), remove batch effect, clearn the data again, and then correct for PC variances. <br> 
    <b>Input:</b> <br>
    <b>Output:</b> <br>
 #
