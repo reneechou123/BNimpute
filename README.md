@@ -4,10 +4,10 @@ BNimpute
 Workflow:
 
 1. Split the expression datasets into different tissue types <br>
-   <b>Input:</b> 1. metadata 2. expression data <br>
+   <b>Input:</b> 1. metadata 2. drosophila expression data from public database <br>
    <b>Output:</b> tissue-specific epxression datasets <br>
 
-2. For each tissue-specific expression dataset, clean the data (remove genes with missing value or zero variance, remove sample outliers), remove batch effect, clearn the data again, and then correct for PC variances. <br> 
+2. For each tissue-specific expression dataset, clean the data (remove genes with zero variance and sample outliers), remove batch effect, clearn the data again. <br> 
    <b>Input:</b> <br>
    <b>Output:</b> <br>
 #
@@ -34,6 +34,8 @@ salivary gland note:
 #### # studies: 5
 #### # excluding 3171 genes due to zero variance
 #### # genes: 14300
+
+#### # samples: 18
 
 mushroom body note:
 #### # samples: 34
@@ -92,7 +94,7 @@ g2 <- ggplot(combat.data.pca, aes(x=-PC1, y=PC2, color=studies)) +
 g2
 
 data = read.table('mushroom body_cleaned.tsv', header=TRUE, row.names=1)
-datExpr <- combat.data
+datExpr <- 2^(combat.data) - 1
 datExpr <- as.data.frame(t(datExpr))
 colnames(datExpr) <- colnames(data)
 rownames(datExpr) <- rownames(data)
