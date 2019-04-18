@@ -69,14 +69,20 @@ var1 <- round(attr(data.pca,"percentVar")[1],2)*100
 var2 <- round(attr(data.pca,"percentVar")[2],2)*100
 data.pca <- as.data.frame(data.pca)
 g <- ggplot(data.pca, aes(x=PC1, y=PC2, color=studies)) +
-       geom_point() +
+       geom_point(size=3, alpha=0.8) +
        scale_color_discrete(name='') +
        theme_bw() +
-       theme(legend.position='bottom', legend.direction='horizontal') +
+       theme(legend.position='bottom', 
+             legend.direction='horizontal',
+             legend.text = element_text(size=14),
+             plot.title=element_text(size=25, face="bold", hjust=0.5),
+             axis.text=element_text(size=20, face='bold'),
+             axis.title=element_text(size=25,face="bold")) +
        xlab(paste0('PC1 (', var1, '%)')) +
        ylab(paste0('PC2 (', var2, '%)')) +
-       xlim(-190, 280) +
-       ylim(-190, 280)
+       xlim(min(min(data.pca$PC1),min(data.pca$PC2)) - 0.05, max(max(data.pca$PC1),max(data.pca$PC2)) + 0.05) +
+       ylim(min(min(data.pca$PC1),min(data.pca$PC2)) - 0.05, max(max(data.pca$PC1),max(data.pca$PC2)) + 0.05) +
+       ggtitle('PCA before batch effect removal')
 g
 ```
 #### # remove batch effect and plot PCA again
@@ -91,14 +97,20 @@ var1 <- round(attr(combat.data.pca,"percentVar")[1],2)*100
 var2 <- round(attr(combat.data.pca,"percentVar")[2],2)*100
 combat.data.pca <- as.data.frame(combat.data.pca)
 g2 <- ggplot(combat.data.pca, aes(x=-PC1, y=PC2, color=studies)) +
-       geom_point() +
+       geom_point(size=3, alpha=0.8) +
        scale_color_discrete(name='') +
        theme_bw() +
-       theme(legend.position='bottom', legend.direction='horizontal') +
+       theme(legend.position='bottom', 
+             legend.direction='horizontal',
+             legend.text = element_text(size=14),
+             plot.title=element_text(size=25, face="bold", hjust=0.5),
+             axis.text=element_text(size=20, face='bold'),
+             axis.title=element_text(size=25,face="bold")) +
        xlab(paste0('PC1 (', var1, '%)')) +
        ylab(paste0('PC2 (', var2, '%)')) +
-       xlim(-190, 180) +
-       ylim(-190, 180)
+       xlim(min(min(data.pca$PC1),min(data.pca$PC2)) - 0.05, max(max(data.pca$PC1),max(data.pca$PC2)) + 0.05) +
+       ylim(min(min(data.pca$PC1),min(data.pca$PC2)) - 0.05, max(max(data.pca$PC1),max(data.pca$PC2)) + 0.05) +
+       ggtitle('PCA after batch effect removal')
 g2
 
 data = read.table('mushroom body_cleaned.tsv', header=TRUE, row.names=1)
@@ -109,35 +121,6 @@ rownames(datExpr) <- rownames(data)
 write.table(datExpr, 'mushroom body_cleaned_2.tsv', col.names=T, row.names=T)
 ```
 
-#### # correct PCA and plot PCA again
-``` r
-samples <- as.factor(1:ncol(combat.data))
-mod <- model.matrix(~1, data=samples)
-n.pc = num.sv(combat.data, mod, method="be", seed=123)
-adjusted.data = sva_network(combat.data, n.pc)
-
-adjusted.data.pca <- parallelPCA(adjusted.data, value='pca', BPPARAM=SerialParam())
-var1 <- round(attr(adjusted.data.pca,"percentVar")[1],2)*100
-var2 <- round(attr(adjusted.data.pca,"percentVar")[2],2)*100
-adjusted.data.pca <- as.data.frame(adjusted.data.pca)
-g3 <- ggplot(adjusted.data.pca, aes(x=-PC1, y=PC2, color=studies)) +
-       geom_point() +
-       scale_color_discrete(name='') +
-       theme_bw() +
-       theme(legend.position='bottom', legend.direction='horizontal') +
-       xlab(paste0('PC1 (', var1, '%)')) +
-       ylab(paste0('PC2 (', var2, '%)')) +
-       xlim(-190, 180) +
-       ylim(-190, 180)
-g3
-
-data = read.table('mushroom body_cleaned.tsv', header=TRUE, row.names=1)
-datExpr <- 2^(adjusted.data) - 1
-datExpr <- as.data.frame(t(datExpr))
-colnames(datExpr) <- colnames(data)
-rownames(datExpr) <- rownames(data)
-write.table(datExpr, 'mushroom body_cleaned_3.tsv', col.names=T, row.names=T)
-```
 
 
 #### # cluster samples and remove outliers
