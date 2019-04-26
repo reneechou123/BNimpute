@@ -79,7 +79,7 @@ g <- ggplot(data.pca, aes(x=PC1, y=PC2, color=studies)) +
        xlab(paste0('PC1 (', var1, '%)')) +
        ylab(paste0('PC2 (', var2, '%)')) +
        xlim(min(min(data.pca$PC1),min(data.pca$PC2)) - 0.05, max(max(data.pca$PC1),max(data.pca$PC2)) + 0.05) +
-       ylim(min(min(data.pca$PC1),min(data.pca$PC2)) - 0.05, max(max(data.pca$PC1),max(data.pca$PC2)) + 0.05) +
+       ylim(min(min(data.pca$PC1),min(data.pca$PC2)) - 0.05, max(max(data.pca$PC1),max(data.pca$PC2)) + 0.05)
 g
 ```
 #### # remove batch effect and plot PCA again
@@ -104,7 +104,7 @@ g2 <- ggplot(combat.data.pca, aes(x=-PC1, y=PC2, color=studies)) +
        xlab(paste0('PC1 (', var1, '%)')) +
        ylab(paste0('PC2 (', var2, '%)')) +
        xlim(min(min(data.pca$PC1),min(data.pca$PC2)) - 0.05, max(max(data.pca$PC1),max(data.pca$PC2)) + 0.05) +
-       ylim(min(min(data.pca$PC1),min(data.pca$PC2)) - 0.05, max(max(data.pca$PC1),max(data.pca$PC2)) + 0.05) +
+       ylim(min(min(data.pca$PC1),min(data.pca$PC2)) - 0.05, max(max(data.pca$PC1),max(data.pca$PC2)) + 0.05)
 g2
 
 data = read.table('mushroom body_cleaned.tsv', header=TRUE, row.names=1)
