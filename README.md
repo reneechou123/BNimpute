@@ -97,7 +97,7 @@ g2 <- ggplot(combat.data.pca, aes(x=-PC1, y=PC2, color=studies)) +
        geom_point(size=5, alpha=0.8) +
        scale_color_discrete(name='') +
        theme_bw() +
-       theme(egend.position = "none",
+       theme(legend.position = "none",
              plot.title=element_text(size=25, face="bold", hjust=0.5),
              axis.text=element_text(size=20, face='bold'),
              axis.title=element_text(size=25,face="bold")) +
