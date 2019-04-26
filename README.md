@@ -69,12 +69,10 @@ var1 <- round(attr(data.pca,"percentVar")[1],2)*100
 var2 <- round(attr(data.pca,"percentVar")[2],2)*100
 data.pca <- as.data.frame(data.pca)
 g <- ggplot(data.pca, aes(x=PC1, y=PC2, color=studies)) +
-       geom_point(size=3, alpha=0.8) +
+       geom_point(size=5, alpha=0.8) +
        scale_color_discrete(name='') +
        theme_bw() +
-       theme(legend.position='bottom', 
-             legend.direction='horizontal',
-             legend.text = element_text(size=14),
+       theme(legend.position = "none",
              plot.title=element_text(size=25, face="bold", hjust=0.5),
              axis.text=element_text(size=20, face='bold'),
              axis.title=element_text(size=25,face="bold")) +
@@ -82,7 +80,6 @@ g <- ggplot(data.pca, aes(x=PC1, y=PC2, color=studies)) +
        ylab(paste0('PC2 (', var2, '%)')) +
        xlim(min(min(data.pca$PC1),min(data.pca$PC2)) - 0.05, max(max(data.pca$PC1),max(data.pca$PC2)) + 0.05) +
        ylim(min(min(data.pca$PC1),min(data.pca$PC2)) - 0.05, max(max(data.pca$PC1),max(data.pca$PC2)) + 0.05) +
-       ggtitle('PCA before batch effect removal')
 g
 ```
 #### # remove batch effect and plot PCA again
@@ -97,12 +94,10 @@ var1 <- round(attr(combat.data.pca,"percentVar")[1],2)*100
 var2 <- round(attr(combat.data.pca,"percentVar")[2],2)*100
 combat.data.pca <- as.data.frame(combat.data.pca)
 g2 <- ggplot(combat.data.pca, aes(x=-PC1, y=PC2, color=studies)) +
-       geom_point(size=3, alpha=0.8) +
+       geom_point(size=5, alpha=0.8) +
        scale_color_discrete(name='') +
        theme_bw() +
-       theme(legend.position='bottom', 
-             legend.direction='horizontal',
-             legend.text = element_text(size=14),
+       theme(egend.position = "none",
              plot.title=element_text(size=25, face="bold", hjust=0.5),
              axis.text=element_text(size=20, face='bold'),
              axis.title=element_text(size=25,face="bold")) +
@@ -110,7 +105,6 @@ g2 <- ggplot(combat.data.pca, aes(x=-PC1, y=PC2, color=studies)) +
        ylab(paste0('PC2 (', var2, '%)')) +
        xlim(min(min(data.pca$PC1),min(data.pca$PC2)) - 0.05, max(max(data.pca$PC1),max(data.pca$PC2)) + 0.05) +
        ylim(min(min(data.pca$PC1),min(data.pca$PC2)) - 0.05, max(max(data.pca$PC1),max(data.pca$PC2)) + 0.05) +
-       ggtitle('PCA after batch effect removal')
 g2
 
 data = read.table('mushroom body_cleaned.tsv', header=TRUE, row.names=1)
