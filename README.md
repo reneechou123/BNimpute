@@ -68,21 +68,24 @@ data.pca <- parallelPCA(data, value='pca', BPPARAM=SerialParam())
 var1 <- round(attr(data.pca,"percentVar")[1],2)*100
 var2 <- round(attr(data.pca,"percentVar")[2],2)*100
 data.pca <- as.data.frame(data.pca)
-cbPalette <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#999999")
 g <- ggplot(data.pca, aes(x=PC1, y=PC2, color=studies)) +
        geom_vline(xintercept=0, linetype='dashed', size=1, alpha=0.5) +
        geom_hline(yintercept=0, linetype='dashed', size=1, alpha=0.5) +
        geom_point(size=5, alpha=0.8) +
-       scale_colour_manual(values=cbPalette) +
+       # scale_color_discrete() +
+       scale_color_brewer(palette = "Dark2") +
        theme_bw() +
        theme(legend.position = "none",
+             legend.title=element_text(size=18, face='bold'),
+             legend.text=element_text(size=15),
              plot.title=element_text(size=25, face="bold", hjust=0.5),
              axis.text=element_text(size=20, face='bold'),
              axis.title=element_text(size=25,face="bold")) +
        xlab(paste0('PC1 (', var1, '%)')) +
        ylab(paste0('PC2 (', var2, '%)')) +
-       xlim(min(min(data.pca$PC1),min(data.pca$PC2)) - 0.05, max(max(data.pca$PC1),max(data.pca$PC2)) + 0.05) +
-       ylim(min(min(data.pca$PC1),min(data.pca$PC2)) - 0.05, max(max(data.pca$PC1),max(data.pca$PC2)) + 0.05)    
+       ggtitle('Mushroom body') +
+       xlim(min(min(data.pca$PC1), min(data.pca$PC2)), max(max(data.pca$PC1), max(data.pca$PC2))) +
+       ylim(min(min(data.pca$PC1), min(data.pca$PC2)), max(max(data.pca$PC1), max(data.pca$PC2)))
 g
 ```
 #### # remove batch effect and plot PCA again
@@ -100,7 +103,7 @@ g2 <- ggplot(combat.data.pca, aes(x=-PC1, y=PC2, color=studies)) +
        geom_vline(xintercept=0, linetype='dashed', size=1, alpha=0.5) +
        geom_hline(yintercept=0, linetype='dashed', size=1, alpha=0.5) +
        geom_point(size=5, alpha=0.8) +
-       scale_colour_manual(values=cbPalette) +
+       scale_color_brewer(palette = "Dark2") +
        theme_bw() +
        theme(legend.position = "none",
              plot.title=element_text(size=25, face="bold", hjust=0.5),
