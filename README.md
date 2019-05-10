@@ -3,13 +3,9 @@ BNimpute
 =============
 Workflow:
 
-1. Split the expression datasets into different tissue types <br>
-   <b>Input:</b> 1. metadata 2. drosophila expression data from public database <br>
-   <b>Output:</b> tissue-specific epxression datasets <br>
+
 
 2. For each tissue-specific expression dataset, clean the data (remove genes with zero variance and sample outliers), remove batch effect, clearn the data again. <br> 
-   <b>Input:</b> <br>
-   <b>Output:</b> <br>
 #
 #
 #
