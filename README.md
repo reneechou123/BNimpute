@@ -1,42 +1,21 @@
 BNimpute
 <img src="../assets/logo_2.png" height="180" align="right" />
 =============
-Workflow:
+BNimpute is an R package which contains pre-trained gene co-expression (GCN) based-Bayesian imputation models for users to download and estimate the missing vlaues in Drosophila tissue-specific RNA-seq datasets. 
+
+
+## Workflow for model construction
+
+#### 1. Clean the tissue-specific gene expression data by following the instructions in https://horvath.genetics.ucla.edu/html/CoexpressionNetwork/Rpackages/WGCNA/Tutorials/FemaleLiver-02-networkConstr-auto.pdf
+
+#### 2. Remove batch effects for each tissue-specific gene expression data. 
 
 
 
-2. For each tissue-specific expression dataset, clean the data (remove genes with zero variance and sample outliers), remove batch effect, clearn the data again. <br> 
-#
-#
-#
-#
-#
-#
-#
-=========================================<br>
-ovariole note:
-#### # samples: 12
-#### # genes: 17471
-#### # studies: 1
-#### # excluding 3711 genes due to zero variance
-#### # genes: 13760
 ```r
 adjacencyA1 = adjacency(data,power=7,type="signed hybrid")
 ```
 
-salivary gland note:
-#### # samples: 19
-#### # genes: 17471
-#### # studies: 5
-#### # excluding 3171 genes due to zero variance
-#### # genes: 14300
-
-#### # samples: 18
-
-mushroom body note:
-#### # samples: 34
-#### # genes: 17471
-#### # studies: 4
 ``` r
 data <- read.table('mushroom body_exp.tsv', header=T, row.names=1) 
 datExpr0 <- as.data.frame(t(data)) 
