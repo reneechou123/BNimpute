@@ -1,14 +1,15 @@
 BNimpute
 <img src="../assets/logo_2.png" height="180" align="right" />
 =============
-BNimpute is an R package which contains pre-trained gene co-expression (GCN) based-Bayesian imputation models for users to download and estimate the missing vlaues in <i>Drosophila</i> tissue-specific RNA-seq datasets. 
+BNimpute is an R package which constructs Bayesian network models contains pre-trained gene co-expression (GCN) based-Bayesian imputation models for users to download and estimate the missing vlaues in <i>Drosophila</i> tissue-specific RNA-seq datasets. 
 
 
 ## Workflow for model construction
 
-#### 1. Clean the tissue-specific gene expression data by following the instructions in https://horvath.genetics.ucla.edu/html/CoexpressionNetwork/Rpackages/WGCNA/Tutorials/FemaleLiver-02-networkConstr-auto.pdf
+#### 1. Clean the tissue-specific gene expression data by following the instructions in https://horvath.genetics.ucla.edu/html/CoexpressionNetwork/Rpackages/WGCNA/Tutorials/FemaleLiver-02-networkConstr-auto.pdf.
 
-#### 2. Remove batch effects for each tissue-specific gene expression data. 
+#### 2. Remove batch effects for each tissue-specific gene expression data, as specified in `remove_batch_effects.R`.
+
 
 
 
