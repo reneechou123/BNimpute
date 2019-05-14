@@ -22,9 +22,6 @@ datExpr0 <- as.data.frame(t(data))
 names(datExpr0) <- rownames(data) 
 rownames(datExpr0) <- names(data) 
 ```
-
-#### # cluster samples and remove outliers
-#### # samples: 34
 #### # WGCNA analysis
 ``` r
 sft = pickSoftThreshold(datExpr, powerVector = powers, networkType = 'signed hybrid', verbose = 5)
