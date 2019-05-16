@@ -23,7 +23,6 @@ data <- t(data)
 #
 #=====================================================================================
 
-
 data.pca <- parallelPCA(data, value='pca', BPPARAM=SerialParam())
 var1 <- round(attr(data.pca,"percentVar")[1],2)*100
 var2 <- round(attr(data.pca,"percentVar")[2],2)*100
@@ -32,7 +31,6 @@ g <- ggplot(data.pca, aes(x=PC1, y=PC2, color=studies)) +
        geom_vline(xintercept=0, linetype='dashed', size=1, alpha=0.5) +
        geom_hline(yintercept=0, linetype='dashed', size=1, alpha=0.5) +
        geom_point(size=5, alpha=0.8) +
-       # scale_color_discrete() +
        scale_color_brewer(palette = "Dark2") +
        theme_bw() +
        theme(legend.position = "none",
@@ -55,13 +53,18 @@ g
 #
 #=====================================================================================
 
-
 batch <- studies
 mod.data <- data
 modcombat <- model.matrix(~1, data=batch)
 combat.data <- ComBat(dat=mod.data, batch=batch, mod=modcombat, par.prior=TRUE, BPPARAM=SerialParam())
 
-# plot pca after batch effect removal
+
+#=====================================================================================
+#
+#  Plot PCA after batch effect removal
+#
+#=====================================================================================
+
 combat.data.pca <- parallelPCA(combat.data, value='pca', BPPARAM=SerialParam())
 var1 <- round(attr(combat.data.pca,"percentVar")[1],2)*100
 var2 <- round(attr(combat.data.pca,"percentVar")[2],2)*100
@@ -88,7 +91,6 @@ g2
 #  Export data
 #
 #=====================================================================================
-
 
 data = read.table('mushroom body_cleaned.tsv', header=TRUE, row.names=1)
 datExpr <- 2^(combat.data) - 1
