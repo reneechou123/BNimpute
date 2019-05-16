@@ -10,9 +10,7 @@ BNimpute is an R package which constructs Bayesian models with external referenc
 
 #### 2. Remove batch effects for each tissue-specific gene expression data, as specified in `remove_batch_effects.R`
 
-#### 3. Detect co-expression modules using WGCNA and retrieve the eigengene expression dataset as well as genes in each module, as specified in `WGCNA_analysis.R`
+#### 3. Detect co-expression modules using WGCNA and retrieve modules as well as the eigengene expression dataset, as specified in `WGCNA_analysis.R`
 
-
-```r
-adjacencyA1 = adjacency(data,power=7,type="signed hybrid")
-```
+##### parallel
+##### build.model
