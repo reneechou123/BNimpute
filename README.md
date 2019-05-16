@@ -13,20 +13,6 @@ BNimpute is an R package which constructs Bayesian models with external referenc
 #### 3. Detect co-expression modules using WGCNA and retrieve the eigengene expression dataset as well as genes in each module, as specified in `WGCNA_analysis.R`
 
 
-
-
 ```r
 adjacencyA1 = adjacency(data,power=7,type="signed hybrid")
-```
-
-#### # select power: 6
-``` r
-net = blockwiseModules(datExpr, power = 7, TOMType = "signed", minModuleSize = 30, reassignThreshold = 0, mergeCutHeight = 0.25, numericLabels = TRUE, pamRespectsDendro = FALSE, saveTOMs = TRUE, saveTOMFileBase = "mushboombodyTOM", networkType = 'signed hybrid', verbose = 3)
-```
-``` r
-sizeGrWindow(12, 9)
-# Convert labels to colors for plotting
-mergedColors = labels2colors(net$colors)
-# Plot the dendrogram and the module colors underneath
-plotDendroAndColors(net$dendrograms[[1]], mergedColors[net$blockGenes[[1]]],"Module colors",dendroLabels = FALSE, hang = 0.03,addGuide = TRUE, guideHang = 0.05)
 ```
