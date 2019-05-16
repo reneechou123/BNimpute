@@ -4,7 +4,7 @@ BNimpute
 BNimpute is an R package which constructs Bayesian models with external reference RNA-seq data retrieved from the NCBI Sequence Read Archive (SRA) to impute missing values in the experimental RNA-seq count matrix. The Bayesian models are constructed using gene co-expression network (GCN) analyzed by WGCNA. The package also contains pre-trained GCN based-Bayesian imputation models for users to download and estimate the missing vlaues in <i>Drosophila</i> tissue-specific RNA-seq datasets. 
 
 
-## Workflow for model construction
+## Workflow for preparing input datasets
 
 #### 1. Clean the tissue-specific gene expression data by following the instructions in https://horvath.genetics.ucla.edu/html/CoexpressionNetwork/Rpackages/WGCNA/Tutorials/FemaleLiver-01-dataInput.pdf
 
