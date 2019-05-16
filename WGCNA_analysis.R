@@ -9,7 +9,7 @@ library(dynamicTreeCut)
 #
 #=====================================================================================
 
-datExpr <- read.table('mushroom body_cleaned_2.tsv', header=T, row.names=1)
+ref.exp <- read.table('mushroom body_cleaned_2.tsv', header=T, row.names=1)
 
 
 #=====================================================================================
@@ -23,7 +23,7 @@ datExpr <- read.table('mushroom body_cleaned_2.tsv', header=T, row.names=1)
 powers <- c(c(1:10), seq(from = 12, to=20, by=2))
 
 # Call the network topology analysis function
-sft <- pickSoftThreshold(datExpr, powerVector = powers, networkType = 'signed hybrid', verbose = 5)
+sft <- pickSoftThreshold(ref.exp, powerVector = powers, networkType = 'signed hybrid', verbose = 5)
 
 # Plot the results
 sizeGrWindow(9, 5)
@@ -56,7 +56,7 @@ text(sft$fitIndices[,1], sft$fitIndices[,5], labels=powers, cex=cex1, col="red")
 #=====================================================================================
 
 # Build gene dendrogram
-adjacency <- adjacency(datExpr, power=8, type="signed hybrid")
+adjacency <- adjacency(ref.exp, power=8, type="signed hybrid")
 diag(adjacency) <- 0
 dissTOM <- 1 - TOMsimilarity(adjacency, TOMType="signed")
 geneDendro <- flashClust(as.dist(dissTOM), method="average")
@@ -68,10 +68,10 @@ tree <- cutreeHybrid(dendro = geneDendro, pamStage=FALSE,
 		    minClusterSize = (30-3*ds), cutHeight = 0.99,
 		    deepSplit = ds, distM = dissTOM)
 modules <- cbind(modules, labels2colors(tree$labels))
-rownames(modules) <- colnames(datExpr)
+rownames(modules) <- colnames(ref.exp)
 
 # Plot the dendrogram with module information and calculate eigen expressions for each module
-plotDendroAndColors(geneTree, modules, "Modules", main = "", dendroLabels=FALSE)
-eigen.exp <- moduleEigengenes(datExpr, colors=modules)$eigengenes
+plotDendroAndColors(geneDendro, modules, "Modules", main = "", dendroLabels=FALSE)
+eig.exp <- moduleEigengenes(ref.exp, colors=modules)$eigengenes
 
 
