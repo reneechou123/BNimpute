@@ -22,6 +22,7 @@ build.model <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5, gene
   # build models for low expression genes
   set.seed(123)
   models <- list()
+  genes <- c()
   for (g in 1:length(low.genes)){
     gene <- low.genes[g]
     bn.dat <- cbind(ref.exp[,colnames(ref.exp)==gene,drop=FALSE], eig.exp[rownames(eig.exp) %in% rownames(ref.exp),])
@@ -30,10 +31,7 @@ build.model <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5, gene
       next
 
     # construct network
-    from <- rep(gene, dim(bn.dat)[2] - 1)
-    to <- colnames(bn.dat)[-1]
-    whitelist <- data.frame(from, to)
-    structure.1 <- hc(bn.dat, whitelist=whitelist)
+    structure.1 <- hc(bn.dat)
     if (!gene %in% structure.1$arcs)
       next
 
@@ -69,8 +67,9 @@ build.model <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5, gene
     sub.exp <- as.data.frame(ref.exp[,colnames(ref.exp) %in% nodes])
     training <- bn.fit(structure.2, sub.exp, ..., replace.unidentifiable=TRUE)
     models <- list.append(models, training)
+    genes <- c(genes, gene)
   }
-  names(models) <- low.genes
+  names(models) <- genes
   return(models)
 }
 
