@@ -27,13 +27,16 @@ build.model <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5, gene
     gene <- low.genes[g]
     bn.dat <- cbind(ref.exp[,colnames(ref.exp)==gene,drop=FALSE], eig.exp[rownames(eig.exp) %in% rownames(ref.exp),])
     bn.dat[[gene]] <- scale(bn.dat[[gene]])
-    if (sum(is.na(bn.dat)) > 0)
+    if (sum(is.na(bn.dat)) > 0){
       next
+    }
 
     # construct network
     structure.1 <- hc(bn.dat)
-    if (!gene %in% structure.1$arcs)
+    if (!gene %in% structure.1$arcs){
+      print(paste0('Gene ', gene, ' emitted during hill-climbing structure learning process.'))
       next
+    }
 
     from <- c()
     to <- c()
