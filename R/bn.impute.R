@@ -1,7 +1,6 @@
 #' @import bnlearn
-#' @import WGCNA
-#' @import
-bn.impute <- function(exp, model){
-  # missing genes in model 
+
+bn.impute <- function(exp.dat, models){
+  
   return(res)
 }
