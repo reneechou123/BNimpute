@@ -14,7 +14,7 @@ build.model <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5, gene
   num.modules <- length(unique(modules[,1])) - 1 # minus grey module
 
   # select highly connected genes as model variables
-  res <- lapply(1:num.genes, function(x) chooseOneHubInEachModule(ref.exp, colorh=modules[,1], numGenes=100, 
+  res <- lapply(seq_len(num.genes), function(x) chooseOneHubInEachModule(ref.exp, colorh=modules[,1], numGenes=100, 
 								  omitColors='MEgrey', power=power))
   res <- as.data.frame(matrix(unlist(res), ncol=num.modules, byrow=TRUE, dimnames=list(NULL, names(res[[1]]))), 
 		       stringAsFactors=FALSE)
@@ -23,7 +23,7 @@ build.model <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5, gene
   set.seed(123)
   models <- list()
   genes <- c()
-  for (g in 1:length(low.genes)){
+  for (g in seq_len(length(low.genes))){
     gene <- low.genes[g]
     bn.dat <- cbind(ref.exp[,colnames(ref.exp)==gene,drop=FALSE], eig.exp[rownames(eig.exp) %in% rownames(ref.exp),])
     bn.dat[[gene]] <- scale(bn.dat[[gene]])
@@ -42,7 +42,7 @@ build.model <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5, gene
     to <- c()
     sub.res <- res
     sub.res[sub.res == gene] <- NA
-    for (i in 1:nrow(structure.1$arcs)){
+    for (i in seq_len(nrow(structure.1$arcs))){
       f <- as.character(sub.res[[structure.1$arcs[i, 1]]]) # from
       c <- as.character(sub.res[[structure.1$arcs[i, 2]]]) # to
       if (length(f)==0){
