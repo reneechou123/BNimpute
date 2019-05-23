@@ -29,6 +29,7 @@ cross.validation <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5,
   set.seed(123)
   error.values <- c()
   for (n in seq_len(nrow(ref.exp))){
+    print(paste0('Cross validation iteration ', n, '...'))
     training.data <-ref.exp[-n,,drop=F]
     test.data <- ref.exp[n,,drop=F]
     predicted.values <- list()
