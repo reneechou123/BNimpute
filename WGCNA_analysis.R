@@ -70,8 +70,8 @@ tree <- cutreeHybrid(dendro = geneDendro, pamStage=FALSE,
 modules <- cbind(modules, labels2colors(tree$labels))
 rownames(modules) <- colnames(ref.exp)
 
-# Plot the dendrogram with module information and calculate eigen expressions for each module
-plotDendroAndColors(geneDendro, modules, "Modules", main = "", dendroLabels=FALSE)
+# Calculate eigen expressions for each module
 eig.exp <- moduleEigengenes(ref.exp, colors=modules)$eigengenes
 
-
+# Plot the dendrogram with module information
+plotDendroAndColors(geneDendro, modules, "Modules", main = "", dendroLabels=FALSE)
