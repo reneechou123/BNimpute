@@ -5,7 +5,7 @@
 #' @import dplyr
 #' @import rlist
 
-build.model <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5, gene.exp.max=10, num.genes=3, seed=123, ...){
+build.model <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5, gene.exp.max=10, num.genes=3, seed=123, ..., replace.unidentifiable=TRUE){
   
   # preprocessing
   low.genes <- colnames(ref.exp[,apply(ref.exp, 2, function(x) sum(x > gene.exp.max) == 0 & sum(x < gene.exp.min) == 0)])
@@ -68,7 +68,7 @@ build.model <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5, gene
 
     # train the model
     sub.exp <- as.data.frame(ref.exp[,colnames(ref.exp) %in% nodes])
-    training <- bn.fit(structure.2, sub.exp, ..., replace.unidentifiable=TRUE)
+    training <- bn.fit(structure.2, sub.exp, ..., replace.unidentifiable=replace.unidentifiable)
     models <- list.append(models, training)
     genes <- c(genes, gene)
   }
