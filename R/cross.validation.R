@@ -9,9 +9,9 @@ cross.validation <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5,
 
   # validation function
   NRMSE <- function(true.data, imputed.data){
-  if (sum(true.data != 0) == 0 & sum(imputed.data != 0) == 0)
-    return(0)
-  return(sqrt(sum((true.data - imputed.data) ^ 2) / sum((true.data - mean(true.data)) ^ 2)))
+    if (sum(true.data != 0) == 0 & sum(imputed.data != 0) == 0)
+      return(0)
+    return(sqrt(sum((true.data - imputed.data) ^ 2) / sum((true.data - mean(true.data)) ^ 2)))
   }
 
   # preprocessing
@@ -26,16 +26,19 @@ cross.validation <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5,
   res <- as.data.frame(matrix(unlist(res), ncol=num.modules, byrow=TRUE, dimnames=list(NULL, names(res[[1]]))),
                        stringAsFactors=FALSE)
 
-  set.seed(123)
+  set.seed(seed)
   error.values <- c()
+  predicted.matrix <- matrix(, nrow=length(low.genes), ncol=0)
+  rownames(predicted.matrix) <- low.genes
   for (n in seq_len(nrow(ref.exp))){
+    
+    # build models for low expression genes
     print(paste0('Cross validation iteration ', n, '...'))
     training.data <-ref.exp[-n,,drop=F]
     test.data <- ref.exp[n,,drop=F]
-    predicted.values <- list()
+    predicted.values <- c()
     predicted.genes <- c()
 
-    # build models for low expression genes
     for (g in seq_len(length(low.genes))){
       gene <- low.genes[g]
       bn.dat <- cbind(ref.exp[,colnames(ref.exp)==gene,drop=FALSE], eig.exp[rownames(eig.exp) %in% rownames(ref.exp),])
@@ -85,20 +88,19 @@ cross.validation <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5,
       
       # estimate missing vlaues
       sub.test <- as.data.frame(test.data[,colnames(test.data) %in% nodes])
-      set.seed(46)
-      predicted.values <- list.append(predicted.values, predict(training, node=gene, data=sub.test, method='bayes-lw'))
+      predicted.values <- c(predicted.values, predict(training, node=gene, data=sub.test, method='bayes-lw'))
       predicted.genes <- c(predicted.genes, gene)
     }
 
-    predicted.matrix <- matrix(unlist(predicted.values), nrow=length(predicted.values), byrow=TRUE)
-    rownames(predicted.matrix) <- predicted.genes
-    colnames(predicted.matrix) <- rownames(test.data)
-
-    true.data <- as.matrix(t(test.data[,colnames(test.data) %in% rownames(predicted.matrix)]))
-    nrmse <- NRMSE(true.data, imputed.data=predicted.matrix)
+    true.data <- t(as.matrix(test.data[,colnames(test.data) %in% predicted.genes]))
+    predicted.values <- as.matrix(predicted.values)
+    rownames(predicted.values) <- predicted.genes
+    nrmse <- NRMSE(true.data, imputed.data=predicted.values)
     error.values <- c(error.values, nrmse)
+    predicted.matrix <- cbind(predicted.matrix, predicted.values[match(rownames(predicted.matrix), rownames(predicted.values))])
   }  
 
+  colnames(predicted.matrix) <- row.names(ref.exp)
   res <- list(error.values, predicted.genes, predicted.matrix)
   names(res) <- c('error.values', 'predicted.genes', 'predicted.matrix')
   return(res)

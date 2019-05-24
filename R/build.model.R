@@ -20,7 +20,7 @@ build.model <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5, gene
 		       stringAsFactors=FALSE)
 
   # build models for low expression genes
-  set.seed(123)
+  set.seed(seed)
   models <- list()
   genes <- c()
   for (g in seq_len(length(low.genes))){
