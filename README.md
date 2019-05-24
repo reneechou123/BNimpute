@@ -14,10 +14,6 @@ BNimpute is an R package which constructs tissue-specific Bayesian gene models w
 
 ## Model construction
 ``` r
-
-ref.exp <- as.data.frame(t(ref.exp))
-eig.exp <- as.data.frame(t(eig.exp))
-
 # Example of mushroom body data
 models <- build.models(ref.exp, modules, eig.exp, power=8)
 ```
