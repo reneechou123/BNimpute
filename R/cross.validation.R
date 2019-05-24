@@ -31,7 +31,7 @@ cross.validation <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5,
   predicted.matrix <- matrix(, nrow=length(low.genes), ncol=0)
   rownames(predicted.matrix) <- low.genes
   for (n in seq_len(nrow(ref.exp))){
-    
+
     # build models for low expression genes
     print(paste0('Cross validation iteration ', n, '...'))
     training.data <-ref.exp[-n,,drop=F]
@@ -41,7 +41,7 @@ cross.validation <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5,
 
     for (g in seq_len(length(low.genes))){
       gene <- low.genes[g]
-      bn.dat <- cbind(ref.exp[,colnames(ref.exp)==gene,drop=FALSE], eig.exp[rownames(eig.exp) %in% rownames(ref.exp),])
+      bn.dat <- cbind(training.data[,colnames(training.data)==gene,drop=FALSE], eig.exp[rownames(eig.exp) %in% rownames(training.data),])
       bn.dat[[gene]] <- scale(bn.dat[[gene]])
       if (sum(is.na(bn.dat)) > 0){
         next
@@ -81,11 +81,11 @@ cross.validation <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5,
       nodes <- nodes[!is.na(nodes)]
       structure.2 <- empty.graph(nodes)
       arcs(structure.2) <- arc.set
-      
+
       # train the model
-      sub.exp <- as.data.frame(ref.exp[,colnames(ref.exp) %in% nodes])
+      sub.exp <- as.data.frame(training.data[,colnames(training.data) %in% nodes])
       training <- bn.fit(structure.2, sub.exp, ..., replace.unidentifiable=replace.unidentifiable)
-      
+
       # estimate missing vlaues
       sub.test <- as.data.frame(test.data[,colnames(test.data) %in% nodes])
       predicted.values <- c(predicted.values, predict(training, node=gene, data=sub.test, method='bayes-lw'))
@@ -98,7 +98,7 @@ cross.validation <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5,
     nrmse <- NRMSE(true.data, imputed.data=predicted.values)
     error.values <- c(error.values, nrmse)
     predicted.matrix <- cbind(predicted.matrix, predicted.values[match(rownames(predicted.matrix), rownames(predicted.values))])
-  }  
+  }
 
   colnames(predicted.matrix) <- row.names(ref.exp)
   res <- list(error.values, predicted.genes, predicted.matrix)

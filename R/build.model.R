@@ -6,15 +6,15 @@
 #' @import rlist
 
 build.model <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5, gene.exp.max=10, num.genes=3, seed=123, ..., replace.unidentifiable=TRUE){
-  
+
   # preprocessing
-  low.genes <- colnames(ref.exp[,apply(ref.exp, 2, function(x) sum(x > gene.exp.max) == 0 & sum(x < gene.exp.min) == 0)])
-  eig.exp <- eig.exp[,colnames(eig.exp)!='MEgrey']
+  low.genes <- colnames(ref.exp[apply(ref.exp, 1, function(x) sum(x > gene.exp.max) == 0 & sum(x < gene.exp.min) == 0),])
+  eig.exp <- eig.exp[rownames(eig.exp)!='MEgrey',]
   modules[,1] <- paste0('ME', modules[,1])
   num.modules <- length(unique(modules[,1])) - 1 # minus grey module
 
   # select highly connected genes as model variables
-  res <- lapply(seq_len(num.genes), function(x) chooseOneHubInEachModule(ref.exp, colorh=modules[,1], numGenes=100, 
+  res <- lapply(seq_len(num.genes), function(x) chooseOneHubInEachModule(t(ref.exp), colorh=modules[,1], numGenes=100, 
 								  omitColors='MEgrey', power=power))
   res <- as.data.frame(matrix(unlist(res), ncol=num.modules, byrow=TRUE, dimnames=list(NULL, names(res[[1]]))), 
 		       stringAsFactors=FALSE)
@@ -25,7 +25,7 @@ build.model <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5, gene
   genes <- c()
   for (g in seq_len(length(low.genes))){
     gene <- low.genes[g]
-    bn.dat <- cbind(ref.exp[,colnames(ref.exp)==gene,drop=FALSE], eig.exp[rownames(eig.exp) %in% rownames(ref.exp),])
+    bn.dat <- rbind(ref.exp[rownames(ref.exp)==gene,,drop=FALSE], eig.exp[,colnames(eig.exp) %in% colnames(ref.exp)])
     bn.dat[[gene]] <- scale(bn.dat[[gene]])
     if (sum(is.na(bn.dat)) > 0){
       next
@@ -67,7 +67,7 @@ build.model <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5, gene
     arcs(structure.2) <- arc.set
 
     # train the model
-    sub.exp <- as.data.frame(ref.exp[,colnames(ref.exp) %in% nodes])
+    sub.exp <- as.data.frame(ref.exp[rownames(ref.exp) %in% nodes,])
     training <- bn.fit(structure.2, sub.exp, ..., replace.unidentifiable=replace.unidentifiable)
     models <- list.append(models, training)
     genes <- c(genes, gene)
