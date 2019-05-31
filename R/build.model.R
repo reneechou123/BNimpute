@@ -69,7 +69,8 @@ build.model <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5, gene
     # train the model
     sub.exp <- as.data.frame(ref.exp[,colnames(ref.exp) %in% nodes])
     training <- bn.fit(structure.2, sub.exp, ..., replace.unidentifiable=replace.unidentifiable)
-    models <- list.append(models, training)
+    model <- list(training, nodes)
+    models <- list.append(models, model)
     genes <- c(genes, gene)
   }
   names(models) <- genes

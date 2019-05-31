@@ -14,18 +14,6 @@ cross.validation <- function(ref.exp, modules, eig.exp, power, gene.exp.min=0.5,
     return(sqrt(sum((true.data - imputed.data) ^ 2) / sum((true.data - mean(true.data)) ^ 2)))
   }
 
-  # preprocessing
-  low.genes <- colnames(ref.exp[,apply(ref.exp, 2, function(x) sum(x > gene.exp.max) == 0 & sum(x < gene.exp.min) == 0)])
-  eig.exp <- eig.exp[,colnames(eig.exp)!='MEgrey']
-  modules[,1] <- paste0('ME', modules[,1])
-  num.modules <- length(unique(modules[,1])) - 1 # minus grey module
-
-  # select highly connected genes as model variables
-  res <- lapply(seq_len(num.genes), function(x) chooseOneHubInEachModule(ref.exp, colorh=modules[,1], numGenes=100,
-                                                                  omitColors='MEgrey', power=power))
-  res <- as.data.frame(matrix(unlist(res), ncol=num.modules, byrow=TRUE, dimnames=list(NULL, names(res[[1]]))),
-                       stringAsFactors=FALSE)
-
   set.seed(seed)
   error.values <- c()
   predicted.matrix <- matrix(, nrow=length(low.genes), ncol=0)
